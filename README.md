@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Steps to follow
 
-## Getting Started
+## Commands to follow
 
-First, run the development server:
+#### NextJs Project Setup command
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```npm
+pnpx create-next-app@latest
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Now add shadcn components
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```npm
+pnpm dlx shadcn@latest add select label input textarea sonner card checkbox dropdown-menu badge button
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Now add Prisma with sqlite
 
-## Learn More
+#### Prisma
 
-To learn more about Next.js, take a look at the following resources:
+```npm
+pnpm add -D prisma
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### To create Prisma folder with .env file
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```pnpm
+pnpm prisma init
+```
 
-## Deploy on Vercel
+#### @Prisma/Client
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```pnpm
+pnpm add @prisma/client
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Now add this to prisma file and create models
+
+```js
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+```
+
+### Now create Prisma models
+
+```npm
+model Users {
+  id        String     @id @unique @default(cuid())
+  firstName String?
+  lastName  String?
+  email     String?    @unique
+  comments  Comments[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([email], name: "idx_users_email")
+}
+```
+
+Use https://www.prismabuilder.io/
+
+#### Now migrate the models created
+
+```npm
+pnpm prisma migrate dev
+```
+
+Give name to migrations
+
+#### Now generate prisma
+
+```npm
+pnpm prisma generate
+```
+
+This helps to generate types in prisma
+
+##### ⚡ When to run pnpm prisma generate?
+
+1. After you install Prisma for the first time.
+2. After you change your schema.prisma (new model, new field, etc.)
+3. After running a migration (pnpm prisma migrate dev).
+
+#### Now run Prisma Studio - Frontend & Backend for database
+
+```npm
+pnpm prisma studio
+```
