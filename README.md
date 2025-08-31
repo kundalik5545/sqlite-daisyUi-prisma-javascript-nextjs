@@ -92,3 +92,15 @@ This helps to generate types in prisma
 ```npm
 pnpm prisma studio
 ```
+
+### Add Daisy Ui
+
+```npm
+pnpm add -D daisyui@latest
+```
+
+#### Now add this to global.css file
+
+```css
+@plugin "daisyui";
+```
